@@ -1,0 +1,31 @@
+{% extends 'dashboard/dashboard.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section id="posts">
+        <h1>Crear un post nuevo</h1>
+        <div class="row">
+            <div class="col-8">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/tinymce/tinymce.js') }}"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'advlist autolink link image lists charmap print preview code',
+            height: 500,
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons code'
+        });
+    </script>
+{% endblock %}

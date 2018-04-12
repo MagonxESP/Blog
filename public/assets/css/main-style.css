@@ -1,0 +1,4 @@
+form input[type="submit"],
+form button[type="submit"] {
+    margin-top: 15px;
+}

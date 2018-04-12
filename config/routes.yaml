@@ -1,0 +1,48 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+index:
+    path: /
+    controller: App\Controller\HomeController::home
+
+login:
+    path: /login
+    controller: App\Controller\UserController::login
+
+logout:
+    path: /logout
+    controller: App\Controller\UserController::logout
+
+dashboard:
+    path: /dashboard
+    controller: App\Controller\BackendController::index
+
+dashboard_posts:
+  path: /dashboard/posts
+  controller: App\Controller\BackendController::posts
+
+dashboard_account:
+  path: /dashboard/account
+  controller: App\Controller\BackendController::account
+
+dashboard_post_editor:
+  path: /dashboard/posts/editor
+  controller: App\Controller\PostController::createPost
+
+user_rename:
+  path: /user/rename
+  controller: App\Controller\UserController::rename
+
+registrarse:
+    path: /signup
+    controller: App\Controller\UserController::signup
+
+post:
+  path: /post/{id}
+  controller: App\Controller\PostController::post
+
+# JsonResponse (para peticiones de ajax)
+user_check_username:
+  path: /user/checkusername
+  controller: App\Controller\UserController::existsUsername

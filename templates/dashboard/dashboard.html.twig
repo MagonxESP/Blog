@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="list-group">
+                    <a id="account-link" class="list-group-item list-group-item-action" href="{{ path('dashboard_account') }}">
+                        <span class="fa fa-user"></span>
+                        Mi Cuenta
+                    </a>
+                    <a id="posts-link" class="list-group-item list-group-item-action" href="{{ path('dashboard_posts') }}">
+                        <span class="fa fa-file"></span>
+                        Posts
+                    </a>
+                    <a id="users-link" class="list-group-item list-group-item-action" href="#">
+                        <span class="fa fa-users"></span>
+                        Usuarios
+                    </a>
+                </div>
+            </div>
+            <div class="col-10">
+                {% block section %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var section = document.getElementsByTagName('section')[0];
+        var link = document.getElementById(section.id + '-link');
+        link.classList.add('active');
+    </script>
+{% endblock %}

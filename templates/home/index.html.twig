@@ -1,0 +1,16 @@
+{# empty Twig template #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container">
+        <div class="row justify-content-center">
+            {% for post in posts %}
+                <div class="col-12">
+                    <a href="{{ path('post', { 'id': post.id }) }}"><h1>{{ post.title }}</h1></a>
+                    <p>Publicado el {{ post.creationDate.format('d/m/Y H:i:s') }} por {{ post.author.getUserName }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

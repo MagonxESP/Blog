@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>{{ post.title }}</h1>
+                <h4>Publicado el {{ post.creationDate.format('d/m/Y H:i:s') }} por {{ post.author.getUserName }}</h4>
+                <div>{{ post.content|raw }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

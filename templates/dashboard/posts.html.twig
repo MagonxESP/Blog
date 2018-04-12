@@ -1,0 +1,47 @@
+{% extends 'dashboard/dashboard.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section id="posts">
+        <div class="d-flex align-items-center">
+            <h1>Posts</h1>
+            <a class="btn btn-light" href="{{ path('dashboard_post_editor') }}" style="margin-left: 25px;">
+                <span class="fa fa-plus"></span>
+                Crear un post
+            </a>
+        </div>
+        {% if numPosts > 0 %}
+            <ul class="list-group list-group-flush">
+                {% for post in posts %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3>{{ post.getTitle }}</h3>
+                            <p>Publicado el {{ post.creationDate.format('d/m/Y H:i:s') }}</p>
+                        </div>
+                        <div>
+                            <a class="btn btn-light" href="#">
+                                <span class="fa fa-edit"></span>
+                                Editar
+                            </a>
+                            <a class="btn btn-danger" href="#">
+                                <span class="fa fa-trash"></span>
+                                Eliminar
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-warning">
+                <h3>No tienes posts!</h3>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

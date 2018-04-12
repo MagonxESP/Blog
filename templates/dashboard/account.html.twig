@@ -1,0 +1,39 @@
+{% extends 'dashboard/dashboard.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section id="account">
+        <h1>{{ user.getUserName }} <span class="badge badge-secondary">{{ user.getRol }}</span></h1>
+        <div class="row">
+            <div class="col-4">
+                <h3>Cambiar nombre de usuario</h3>
+                <div class="alert alert-danger" id="username-status-msg" role="alert"></div>
+                <form id="form-ch-username" action="{{ path('user_rename') }}" method="post">
+                    <input class="form-control" type="text" name="newusername" required />
+                    <button class="btn btn-success" type="submit">Cambiar nombre</button>
+                </form>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-4">
+                <h3>Cambiar la contraseña</h3>
+                <form id="form-ch-password">
+                    <input class="form-control" type="password" name="currentpassword" required />
+                    <input class="form-control" type="password" name="newpassword" required />
+                    <input class="form-control" type="password" name="repatnewpassword" required />
+                    <button class="btn btn-success">Cambiar contraseña</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+    </script>
+{% endblock %}

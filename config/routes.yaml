@@ -46,3 +46,4 @@ post:
 user_check_username:
   path: /user/checkusername
   controller: App\Controller\UserController::existsUsername
+  methods: POST

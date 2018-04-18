@@ -115,5 +115,7 @@ class Post {
     public function setAuthor(User $author) {
         $this->author = $author;
     }
-    
+
+
+
 }

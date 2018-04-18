@@ -26,9 +26,13 @@ dashboard_account:
   path: /dashboard/account
   controller: App\Controller\BackendController::account
 
-dashboard_post_editor:
+dashboard_create_post:
   path: /dashboard/posts/editor
   controller: App\Controller\PostController::createPost
+
+dashboard_edit_post:
+  path: /dashboard/posts/edit/{id}
+  controller: App\Controller\PostController::editPost
 
 user_rename:
   path: /user/rename

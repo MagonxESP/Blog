@@ -94,7 +94,7 @@ class UserController extends Controller {
         $username = $request->get('username');
         $user = $this->getDoctrine()
                         ->getManager()
-                        ->getRepository('User')
+                        ->getRepository(User::class)
                         ->findOneBy(['username' => $username]);
 
         if(isset($user) && !empty($user)) {

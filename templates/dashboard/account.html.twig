@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-4">
                 <h3>Cambiar nombre de usuario</h3>
-                <div class="alert alert-danger" id="username-status-msg" role="alert"></div>
+                <div style="display: none;" class="alert alert-danger" id="username-status-msg" role="alert"></div>
                 <form id="form-ch-username" action="{{ path('user_rename') }}" method="post">
                     <input class="form-control" type="text" name="newusername" required />
                     <button class="btn btn-success" type="submit">Cambiar nombre</button>
@@ -21,10 +21,10 @@
             <div class="col-4">
                 <h3>Cambiar la contraseña</h3>
                 <form id="form-ch-password">
-                    <input class="form-control" type="password" name="currentpassword" required />
-                    <input class="form-control" type="password" name="newpassword" required />
-                    <input class="form-control" type="password" name="repatnewpassword" required />
-                    <button class="btn btn-success">Cambiar contraseña</button>
+                    <input class="form-control" type="password" name="currentpassword" placeholder="Contraseña actual" required />
+                    <input class="form-control" type="password" name="newpassword" placeholder="Contraseña nueva" required />
+                    <input class="form-control" type="password" name="repatnewpassword" placeholder="Repetir contraseña nueva" required />
+                    <button class="btn btn-success" type="submit">Cambiar contraseña</button>
                 </form>
             </div>
         </div>
@@ -34,6 +34,44 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        function checkUsername(name, callback) {
+            $.ajax({
+                url: "{{ path('user_check_username') }}",
+                type: 'POST',
+                data: { username: name },
+                dataType: 'JSON',
+                success: function(data) {
+                    callback(data.isused);
+                }
+            });
+        }
 
+        $(document).ready(function(){
+            var allowSubmit = true;
+            var $alertBox = $('#username-status-msg');
+            var $inputUsername = $('#form-ch-username input');
+    /*
+            $('#form-ch-username').on('submit', function(event){
+                if(!allowSubmit) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+*/
+            $inputUsername.on('blur', function(){
+               var username = $(this).val();
+
+               checkUsername(username, function(isUsed) {
+                   if(isUsed) {
+                       $alertBox.text('El nombre de usuario esta en uso');
+                       $alertBox.show();
+                       $inputUsername.css('box-shadow', '0px 0px 3px red');
+                   } else {
+                       $alertBox.hide();
+                       $inputUsername.css('box-shadow', '0px 0px 3px green');
+                   }
+               });
+            });
+        });
     </script>
 {% endblock %}

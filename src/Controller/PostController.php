@@ -37,4 +37,25 @@ class PostController extends Controller {
            'form' => $form->createView()
         ]);
     }
+
+    public function editPost(Request $request, int $id) {
+        $post = $this->getDoctrine()
+                    ->getRepository(Post::class)
+                    ->findBy([ 'id' => $id ]);
+
+        $form = $this->createForm(PostType::class, $post);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $post->setAuthor($this->getUser());
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($post);
+            $manager->flush();
+            return $this->redirectToRoute('dashboard_posts');
+        }
+
+        return $this->render('dashboard/posteditor_edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }

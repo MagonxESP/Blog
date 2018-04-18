@@ -8,7 +8,7 @@
     <section id="posts">
         <div class="d-flex align-items-center">
             <h1>Posts</h1>
-            <a class="btn btn-light" href="{{ path('dashboard_post_editor') }}" style="margin-left: 25px;">
+            <a class="btn btn-light" href="{{ path('dashboard_create_post') }}" style="margin-left: 25px;">
                 <span class="fa fa-plus"></span>
                 Crear un post
             </a>
@@ -22,7 +22,7 @@
                             <p>Publicado el {{ post.creationDate.format('d/m/Y H:i:s') }}</p>
                         </div>
                         <div>
-                            <a class="btn btn-light" href="#">
+                            <a class="btn btn-light" href="{{ path('dashboard_edit_post', { id: post.id }) }}">
                                 <span class="fa fa-edit"></span>
                                 Editar
                             </a>
@@ -44,4 +44,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+
+    </script>
 {% endblock %}

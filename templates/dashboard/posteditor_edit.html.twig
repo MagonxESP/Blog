@@ -10,7 +10,13 @@
         <div class="row">
             <div class="col-8">
                 {{ form_start(form) }}
-                {{ form_widget(form) }}
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_label(form.tags) }}
+                {{ form_widget(form.tags) }}
+                {{ form_label(form.content) }}
+                {{ form_widget(form.content) }}
+                {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>
         </div>
@@ -19,4 +25,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script>
+        $(document).ready(function(){
+           $('#post_publicar').text("Actualizar");
+        });
+    </script>
 {% endblock %}

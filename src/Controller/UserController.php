@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -81,6 +82,19 @@ class UserController extends Controller {
         }
 
         return $this->redirectToRoute('dashboard_account');
+    }
+
+    public function changePassword(Request $request, PasswordEncoderInterface $passwordEncoder) {
+        $user = $this->getUser();
+        $oldPassword = $passwordEncoder->encodePassword($user, $request->get('currentpassword'));
+        $newpassword = $request->get('newpassword');
+        $repeatedPassword = $request->get('repatnewpassword');
+
+        if($oldPassword === $user->getPassword()) {
+            if($newpassword === $repeatedPassword) {
+                // todo con todoX
+            }
+        }
     }
 
     /**

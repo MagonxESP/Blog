@@ -1,5 +1,14 @@
 {% extends 'dashboard/dashboard.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        form button {
+            margin-top: 15px;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     {{ parent() }}
 {% endblock %}

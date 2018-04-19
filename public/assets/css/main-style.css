@@ -1,3 +1,9 @@
+.container,
+.container-fluid {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 form input[type="text"],
 form input[type="email"],
 form input[type="password"] {

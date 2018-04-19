@@ -26,7 +26,7 @@
                                 <span class="fa fa-edit"></span>
                                 Editar
                             </a>
-                            <a class="btn btn-danger" href="#">
+                            <a class="btn btn-danger deletepost" data-post-id="{{ post.id }}" href="#">
                                 <span class="fa fa-trash"></span>
                                 Eliminar
                             </a>
@@ -45,6 +45,31 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        $(document).ready(function(){
+            $('.deletepost').on('click', function(event){
+                var $this = $(this);
+                event.stopPropagation();
+                event.preventDefault();
 
+                if(confirm('¿Estas seguro de eliminar el post?')) {
+                    var postid = $this.data('post-id');
+
+                    $.ajax({
+                        url: '{{ path('dashboard_delete_post') }}',
+                        type: 'POST',
+                        data: { id: postid },
+                        dataType: 'JSON',
+                        success: function(data) {
+                            console.log(data);
+                            if(data.removed) {
+                                $this.parent().parent().remove();
+                            } else {
+                                alert('El post no se ha eliminado\nError: ' + data.error);
+                            }
+                        }
+                    });
+                }
+            });
+        });
     </script>
 {% endblock %}

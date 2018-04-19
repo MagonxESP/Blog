@@ -33,9 +33,10 @@ class BackendController extends Controller {
         ]);
     }
 
-    public function account(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+    public function account() {
         return $this->render('dashboard/account.html.twig', [
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'changePasswordError' => null
         ]);
     }
 

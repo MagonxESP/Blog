@@ -13,17 +13,20 @@
                 <div style="display: none;" class="alert alert-danger" id="username-status-msg" role="alert"></div>
                 <form id="form-ch-username" action="{{ path('user_rename') }}" method="post">
                     <input class="form-control" type="text" name="newusername" required />
-                    <button class="btn btn-success" type="submit">Cambiar nombre</button>
+                    <button class="btn btn-success" type="submit" disabled>Cambiar nombre</button>
                 </form>
             </div>
         </div>
         <div class="row" style="margin-top: 30px;">
             <div class="col-4">
                 <h3>Cambiar la contraseña</h3>
-                <form id="form-ch-password">
+                {% if changePasswordError %}
+                    <div class="alert alert-danger">{{ changePasswordError }}</div>
+                {% endif %}
+                <form id="form-ch-password" action="{{ path('user_change_password') }}" method="post">
                     <input class="form-control" type="password" name="currentpassword" placeholder="Contraseña actual" required />
-                    <input class="form-control" type="password" name="newpassword" placeholder="Contraseña nueva" required />
-                    <input class="form-control" type="password" name="repatnewpassword" placeholder="Repetir contraseña nueva" required />
+                    <input id="passwordInput" class="form-control" type="password" name="newpassword" placeholder="Contraseña nueva" required />
+                    <input id="passwordrepeatInput" class="form-control" type="password" name="repatnewpassword" placeholder="Repetir contraseña nueva" required />
                     <button class="btn btn-success" type="submit">Cambiar contraseña</button>
                 </form>
             </div>
@@ -34,43 +37,56 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        function checkUsername(name, callback) {
-            $.ajax({
-                url: "{{ path('user_check_username') }}",
-                type: 'POST',
-                data: { username: name },
-                dataType: 'JSON',
-                success: function(data) {
-                    callback(data.isused);
-                }
-            });
-        }
-
         $(document).ready(function(){
-            var allowSubmit = true;
             var $alertBox = $('#username-status-msg');
-            var $inputUsername = $('#form-ch-username input');
-    /*
-            $('#form-ch-username').on('submit', function(event){
-                if(!allowSubmit) {
-                    event.preventDefault();
-                    return false;
+            var $inputUsername = $("#form-ch-username input");
+            var $buttonChUserName = $("#form-ch-username button");
+
+            $inputUsername.on('blur', function(){
+               var name = $(this).val();
+
+                if(name !== "") {
+                    $.ajax({
+                        url: "{{ path('user_check_username') }}",
+                        type: 'POST',
+                        data: { username: name },
+                        dataType: 'JSON',
+                        success: function(data) {
+                            if(data.isused) {
+                                $alertBox.text('El nombre de usuario esta en uso');
+                                $alertBox.show();
+                                $inputUsername.css('box-shadow', '0px 0px 3px red');
+                                $buttonChUserName.prop("disabled", true);
+                            } else {
+                                $alertBox.hide();
+                                $inputUsername.css('box-shadow', '0px 0px 3px green');
+                                $buttonChUserName.prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $buttonChUserName.prop("disabled", true);
                 }
             });
-*/
-            $inputUsername.on('blur', function(){
-               var username = $(this).val();
 
-               checkUsername(username, function(isUsed) {
-                   if(isUsed) {
-                       $alertBox.text('El nombre de usuario esta en uso');
-                       $alertBox.show();
-                       $inputUsername.css('box-shadow', '0px 0px 3px red');
-                   } else {
-                       $alertBox.hide();
-                       $inputUsername.css('box-shadow', '0px 0px 3px green');
-                   }
-               });
+            $('#passwordrepeatInput').on('blur', function() {
+               var password = $('#passwordInput').val();
+               var repeatPassword = $(this).val();
+
+               if(password === repeatPassword) {
+                   $(this).css('box-shadow', '0px 0px 3px green');
+                   $('#passwordInput').css('box-shadow', '0px 0px 3px green');
+
+                   $('#form-ch-password').off('submit');
+               } else {
+                   $(this).css('box-shadow', '0px 0px 3px red');
+                   $('#passwordInput').css('box-shadow', '0px 0px 3px red');
+
+                   $('#form-ch-password').on('submit', function(event){
+                      event.preventDefault();
+                      alert('Las contraseñas no coinciden!');
+                   });
+               }
             });
         });
     </script>

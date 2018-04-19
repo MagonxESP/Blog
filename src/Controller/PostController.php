@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class PostController extends Controller {
@@ -41,7 +42,7 @@ class PostController extends Controller {
     public function editPost(Request $request, int $id) {
         $post = $this->getDoctrine()
                     ->getRepository(Post::class)
-                    ->findBy([ 'id' => $id ]);
+                    ->findOneBy([ 'id' => $id ]);
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -56,6 +57,33 @@ class PostController extends Controller {
 
         return $this->render('dashboard/posteditor_edit.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    public function deletePost(Request $request) {
+        $id = $request->get('id');
+        $errorMessage = null;
+        $isRemoved = false;
+
+        try {
+            $post = $this->getDoctrine()
+                ->getRepository(Post::class)
+                ->findOneBy([ 'id' => $id ]);
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($post);
+            $manager->flush();
+
+            $isRemoved = true;
+        } catch(\Exception $e) {
+            $isRemoved = false;
+            $errorMessage = $e->getMessage();
+        }
+
+        return new JsonResponse([
+            'removed' => $isRemoved,
+            'postid' => $id,
+            'error' => $errorMessage
         ]);
     }
 }

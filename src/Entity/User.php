@@ -34,7 +34,7 @@ class User implements UserInterface {
      *
      * @ORM\Column(type="string")
      */
-    private $rol = "user";
+    private $rol = "ROLE_USER";
     
     /**
      *

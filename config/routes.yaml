@@ -38,6 +38,10 @@ user_rename:
   path: /user/rename
   controller: App\Controller\UserController::rename
 
+user_change_password:
+  path: /user/changepassword
+  controller: App\Controller\UserController::changePassword
+
 registrarse:
     path: /signup
     controller: App\Controller\UserController::signup
@@ -50,4 +54,9 @@ post:
 user_check_username:
   path: /user/checkusername
   controller: App\Controller\UserController::existsUsername
+  methods: POST
+
+dashboard_delete_post:
+  path: /dashboard/posts/delete
+  controller: App\Controller\PostController::deletePost
   methods: POST

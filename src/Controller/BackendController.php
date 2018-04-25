@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\ModPasswordType;
 use App\Form\ModUserNameType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,9 +35,22 @@ class BackendController extends Controller {
     }
 
     public function account() {
+        // renderizar formulario aqui
+
         return $this->render('dashboard/account.html.twig', [
             'user' => $this->getUser(),
             'changePasswordError' => null
+        ]);
+    }
+
+    public function users() {
+        $users = $this->getDoctrine()
+                    ->getRepository(User::class)
+                    ->findAll();
+
+        return $this->render('dashboard/users.html.twig', [
+            'numUsers' => sizeof($users),
+            'users' => $users
         ]);
     }
 

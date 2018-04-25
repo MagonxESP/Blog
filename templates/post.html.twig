@@ -10,5 +10,14 @@
                 <div>{{ post.content|raw }}</div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {{ render(controller('App\\Controller\\CommentController::commentform', { id: post.id })) }}
+                {% else %}
+                    <!-- Aqui boton para iniciar sesion en caso que no se haya iniciado sesion -->
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}

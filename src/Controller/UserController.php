@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Form\EditUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,6 +71,30 @@ class UserController extends Controller {
         ]);
     }
 
+    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, int $id) {
+        $status = false;
+        $usr = $this->getDoctrine()
+                    ->getRepository(User::class)
+                    ->findOneBy([ 'id' => $id ]);
+
+        $form = $this->createForm(EditUserType::class, $usr);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $password = $passwordEncoder->encodePassword($usr, $usr->getPassword());
+            $usr->setPassword($password);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($usr);
+            $manager->flush();
+            $status = true;
+        }
+
+        return $this->render('dashboard/edituser.html.twig', [
+           'form' => $form->createView(),
+           'status' => $status
+        ]);
+    }
+
     public function rename(Request $request) {
         $user = $this->getUser();
         $newUserName = $request->get('newusername');
@@ -84,7 +109,8 @@ class UserController extends Controller {
         return $this->redirectToRoute('dashboard_account');
     }
 
-    public function changePassword(Request $request, PasswordEncoderInterface $passwordEncoder) {
+    public function changePassword(Request $request) {
+        $passwordEncoder = new PasswordEncoder();
         $user = $this->getUser();
         $oldPassword = $passwordEncoder->encodePassword($user, $request->get('currentpassword'));
         $newpassword = $request->get('newpassword');
@@ -92,9 +118,15 @@ class UserController extends Controller {
 
         if($oldPassword === $user->getPassword()) {
             if($newpassword === $repeatedPassword) {
-                // todo con todoX
+                $password = $passwordEncoder->encodePassword($user, $newpassword);
+                $user->setPassword($password);
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($user);
+                $manager->flush();
             }
         }
+
+        return $this->redirectToRoute('dashboard_account');
     }
 
     /**
@@ -117,6 +149,34 @@ class UserController extends Controller {
 
         return new JsonResponse([
             'isused' => $isUsed
+        ]);
+    }
+
+    /**
+     * Elimina un usuario por su id
+     * (se ejecutara mediante ajax)
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteUser(Request $request) {
+        $userId = $request->get('userid');
+        $errorMessage = "";
+
+        try {
+            $manager = $this->getDoctrine()->getManager();
+            $usr = $manager->getRepository(User::class)
+                            ->findOneBy([ 'id' => $userId ]);
+            $manager->remove($usr);
+            $manager->flush();
+            $done = true;
+        } catch(\Exception $e) {
+            $errorMessage = $e->getMessage();
+            $done = false;
+        }
+
+        return new JsonResponse([
+            'error' => $errorMessage,
+            'status' => $done
         ]);
     }
 

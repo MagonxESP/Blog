@@ -1,0 +1,69 @@
+{% extends 'dashboard/dashboard.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block section %}
+    <section id="users">
+        <div class="d-flex align-items-center">
+            <h1>Usuarios</h1>
+            <!--
+            <a class="btn btn-light" href="{{ path('dashboard_create_post') }}" style="margin-left: 25px;">
+                <span class="fa fa-plus"></span>
+                Crear un post
+            </a>
+            -->
+        </div>
+        {% if numUsers > 0 %}
+            <ul class="list-group list-group-flush">
+                {% for user in users %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3>{{ user.getUsername }}</h3>
+                        </div>
+                        <div>
+                            <a class="btn btn-light" href="{{ path('dashboard_edit_user', { id: user.id }) }}">
+                                <span class="fa fa-edit"></span>
+                                Editar
+                            </a>
+                            <a class="btn btn-danger delete-user" data-user-id="{{ user.id }}" href="#">
+                                <span class="fa fa-trash"></span>
+                                Eliminar
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="alert alert-warning">
+                <h3>No tienes posts!</h3>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('.delete-user').on('click', function(event){
+           event.preventDefault();
+           var $this = $(this);
+           var userId = $this.data("user-id");
+
+           $.ajax({
+               url: '{{ path('user_delete') }}',
+               type: 'POST',
+               data: { userid: userId },
+               dataType: 'JSON',
+               success: function(data) {
+                   if(data.status) {
+                       $this.parent().parent().remove();
+                   } else {
+                       alert("Error al eliminar el usuario: " + data.error);
+                   }
+               }
+           });
+        });
+    </script>
+{% endblock %}

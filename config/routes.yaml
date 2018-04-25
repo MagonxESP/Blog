@@ -34,6 +34,14 @@ dashboard_edit_post:
   path: /dashboard/posts/edit/{id}
   controller: App\Controller\PostController::editPost
 
+dashboard_users:
+  path: /dashboard/users
+  controller: App\Controller\BackendController::users
+
+dashboard_edit_user:
+  path: /dashboard/user/edit/{id}
+  controller: App\Controller\UserController::edit
+
 user_rename:
   path: /user/rename
   controller: App\Controller\UserController::rename
@@ -54,9 +62,14 @@ post:
 user_check_username:
   path: /user/checkusername
   controller: App\Controller\UserController::existsUsername
-  methods: POST
+  methods: [POST]
 
 dashboard_delete_post:
   path: /dashboard/posts/delete
   controller: App\Controller\PostController::deletePost
-  methods: POST
+  methods: [POST]
+
+user_delete:
+  path: /user/delete
+  controller: App\Controller\UserController::deleteUser
+  methods: [POST]

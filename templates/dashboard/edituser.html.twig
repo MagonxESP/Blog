@@ -9,14 +9,24 @@
         <h1>Editar un usuario</h1>
         <div class="row">
             <div class="col-4">
-                {% if status %}
-                    <!-- alerta de bootstrap -->
+                {% if status is not null %}
+                    {% if status == true %}
+                        <div class="alert alert-success">
+                            Se han actualizado los datos del usuario!
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">Ha ocurrido un error mientras se actualizaban los datos del usuario!</h4>
+                            <p>{{ error }}</p>
+                        </div>
+                    {% endif %}
                 {% endif %}
                 {{ form_start(form) }}
                 {{ form_label(form.username) }}
                 {{ form_widget(form.username) }}
                 {{ form_label(form.rol) }}
                 {{ form_widget(form.rol) }}
+                {{ form_label(form.password) }}
                 {{ form_widget(form.password) }}
                 {{ form_rest(form) }}
                 {{ form_end(form) }}

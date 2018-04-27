@@ -33,20 +33,11 @@ class EditUserType extends AbstractType {
                     'class' => 'form-control'
                 ]
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'required' => true,
-                'first_options' => [
-                    'label' => 'Contraseña',
-                    'attr' => [
-                        'class' => 'form-control'
-                    ]
-                ],
-                'second_options' => [
-                    'label' => 'Repetir contraseña',
-                    'attr' => [
-                        'class' => 'form-control'
-                    ]
+            ->add('password', PasswordType::class, [
+                'label' => 'Contraseña',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
                 ]
             ])
             ->add('Actualizar', SubmitType::class, [

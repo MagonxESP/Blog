@@ -10,11 +10,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Entity\User;
-use App\Form\ModPasswordType;
-use App\Form\ModUserNameType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class BackendController extends Controller {
 
@@ -46,7 +42,7 @@ class BackendController extends Controller {
     public function users() {
         $users = $this->getDoctrine()
                     ->getRepository(User::class)
-                    ->findAll();
+                    ->findBy([ 'rol' => 'ROLE_USER' ]);
 
         return $this->render('dashboard/users.html.twig', [
             'numUsers' => sizeof($users),

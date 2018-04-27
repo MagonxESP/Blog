@@ -38,5 +38,6 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/dashboard, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/dashboard/users, roles: ROLE_ADMIN }
+        - { path: ^/user/delete, roles: ROLE_ADMIN }
         # - { path: ^/login, roles: IS_AUNTHENTICATED_ANONYMOUSLY }
         # - { path: ^/profile, roles: ROLE_USER }

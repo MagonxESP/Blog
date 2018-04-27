@@ -41,6 +41,8 @@ dashboard_users:
 dashboard_edit_user:
   path: /dashboard/user/edit/{id}
   controller: App\Controller\UserController::edit
+  requirements:
+    id: '\d+'
 
 user_rename:
   path: /user/rename
@@ -70,6 +72,8 @@ dashboard_delete_post:
   methods: [POST]
 
 user_delete:
-  path: /user/delete
+  path: /user/delete/{id}
   controller: App\Controller\UserController::deleteUser
-  methods: [POST]
+  methods: [GET]
+  requirements:
+    id: '\d+'

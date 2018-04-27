@@ -10,12 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PostController extends Controller {
 
-    public function post($id) {
-        $post = $this->getDoctrine()
-                    ->getRepository(Post::class)
-                    ->find($id);
-
-        return $this->render('post.html.twig', [
+    public function post(Post $post) {
+        return $this->render('post/post.html.twig', [
             'post' => $post
         ]);
     }
@@ -39,11 +35,7 @@ class PostController extends Controller {
         ]);
     }
 
-    public function editPost(Request $request, int $id) {
-        $post = $this->getDoctrine()
-                    ->getRepository(Post::class)
-                    ->findOneBy([ 'id' => $id ]);
-
+    public function editPost(Request $request, Post $post) {
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 

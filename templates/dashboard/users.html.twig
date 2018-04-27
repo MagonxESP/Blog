@@ -23,11 +23,11 @@
                             <h3>{{ user.getUsername }}</h3>
                         </div>
                         <div>
-                            <a class="btn btn-light" href="{{ path('dashboard_edit_user', { id: user.id }) }}">
+                            <a class="btn btn-light" href="{{ path('dashboard_edit_user', { "id": user.id }) }}">
                                 <span class="fa fa-edit"></span>
                                 Editar
                             </a>
-                            <a class="btn btn-danger delete-user" data-user-id="{{ user.id }}" href="#">
+                            <a class="btn btn-danger delete-user" href="{{ path('user_delete', { 'id': user.id }) }}">
                                 <span class="fa fa-trash"></span>
                                 Eliminar
                             </a>
@@ -37,7 +37,7 @@
             </ul>
         {% else %}
             <div class="alert alert-warning">
-                <h3>No tienes posts!</h3>
+                <h3>No tienes usuarios!</h3>
             </div>
         {% endif %}
     </section>
@@ -49,12 +49,11 @@
         $('.delete-user').on('click', function(event){
            event.preventDefault();
            var $this = $(this);
-           var userId = $this.data("user-id");
+           var _url = $this.attr("href");
 
            $.ajax({
-               url: '{{ path('user_delete') }}',
-               type: 'POST',
-               data: { userid: userId },
+               url: _url,
+               type: 'GET',
                dataType: 'JSON',
                success: function(data) {
                    if(data.status) {

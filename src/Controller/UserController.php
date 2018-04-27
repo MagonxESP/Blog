@@ -6,12 +6,12 @@ use App\Entity\User;
 use App\Form\RegisterType;
 use App\Form\EditUserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 class UserController extends Controller {
 
@@ -71,27 +71,35 @@ class UserController extends Controller {
         ]);
     }
 
-    public function edit(Request $request, UserPasswordEncoderInterface $passwordEncoder, int $id) {
-        $status = false;
-        $usr = $this->getDoctrine()
-                    ->getRepository(User::class)
-                    ->findOneBy([ 'id' => $id ]);
+    public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder) {
+        $status = null;
+        $errorMessage = "";
 
-        $form = $this->createForm(EditUserType::class, $usr);
+        $password = $user->getPassword();
+        $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($usr, $usr->getPassword());
-            $usr->setPassword($password);
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($usr);
-            $manager->flush();
-            $status = true;
+            try {
+                if($form->getData()->getPassword()) {
+                    $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+                }
+
+                $user->setPassword($password);
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($user);
+                $manager->flush();
+                $status = true;
+            } catch(\Exception $e) {
+                $errorMessage = $e->getMessage();
+                $status = false;
+            }
         }
 
         return $this->render('dashboard/edituser.html.twig', [
            'form' => $form->createView(),
-           'status' => $status
+           'status' => $status,
+           'error' => $errorMessage
         ]);
     }
 
@@ -155,18 +163,15 @@ class UserController extends Controller {
     /**
      * Elimina un usuario por su id
      * (se ejecutara mediante ajax)
-     * @param Request $request
+     * @param User $user
      * @return JsonResponse
      */
-    public function deleteUser(Request $request) {
-        $userId = $request->get('userid');
+    public function deleteUser(User $user) {
         $errorMessage = "";
 
         try {
             $manager = $this->getDoctrine()->getManager();
-            $usr = $manager->getRepository(User::class)
-                            ->findOneBy([ 'id' => $userId ]);
-            $manager->remove($usr);
+            $manager->remove($user);
             $manager->flush();
             $done = true;
         } catch(\Exception $e) {

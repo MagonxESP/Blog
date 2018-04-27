@@ -94,7 +94,7 @@ class User implements UserInterface {
         $this->username = $username;
     }
 
-    public function setPassword(string $password) {
+    public function setPassword($password) {
         $this->password = $password;
     }
 

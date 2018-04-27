@@ -9,3 +9,13 @@ form input[type="email"],
 form input[type="password"] {
     margin: 10px 0px;
 }
+
+.post-header {
+    border-bottom: 1px solid black;
+    padding: 15px 0px;
+}
+
+.post-header,
+.post-body {
+    margin-bottom: 35px;
+}

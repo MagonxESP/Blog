@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+//use App\Entity\Comment;
+use App\Entity\Post;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
-class CommentController extends Controller
-{
+class CommentController extends Controller {
 
-    public function index()
-    {
-        // replace this line with your own code!
-        return $this->render('@Maker/demoPage.html.twig', [ 'path' => str_replace($this->getParameter('kernel.project_dir').'/', '', __FILE__) ]);
+    public function commentform(Request $request, Post $post) {
+        // crear formulario y renderizarlo en la plantilla!!
+        return $this->render('post/commentform.html.twig');
     }
+
 }

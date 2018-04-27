@@ -63,7 +63,7 @@ class Comment
     }
 
     public function setContent($content) {
-        $this->content = $content;
+        $this->content = strip_tags(htmlspecialchars($content));
     }
 
     public function setUser($user) {

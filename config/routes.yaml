@@ -60,6 +60,12 @@ post:
   path: /post/{id}
   controller: App\Controller\PostController::post
 
+post_comment:
+  path: /post/{id}/comment
+  controller: App\Controller\CommentController::commentform
+  requirements:
+    id: '\d+'
+
 # JsonResponse (para peticiones de ajax)
 user_check_username:
   path: /user/checkusername
@@ -77,3 +83,20 @@ user_delete:
   methods: [GET]
   requirements:
     id: '\d+'
+
+# Api
+
+api_get_users:
+  path: /api/user
+  controller: App\Controller\Api\UserController::users
+  methods: [GET]
+
+api_new_user:
+  path: /api/user
+  controller: App\Controller\Api\UserController::newUser
+  methods: [POST]
+
+#api_get_user:
+#  path: /api/user/{username}
+#  controller: App\Controller\Api\UserController::getUser
+#  methods: [GET]

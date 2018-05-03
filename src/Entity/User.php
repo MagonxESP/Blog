@@ -106,7 +106,7 @@ class User implements UserInterface {
         return $this->isActive;
     }
 
-    public function getLastlogin(): DateTime {
+    public function getLastlogin() {
         return $this->lastlogin;
     }
 

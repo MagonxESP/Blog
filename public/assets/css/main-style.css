@@ -19,3 +19,11 @@ form input[type="password"] {
 .post-body {
     margin-bottom: 35px;
 }
+
+.comment-editor form button {
+    margin-top: 10px;
+}
+
+.comment-editor {
+    margin-bottom: 15px;
+}

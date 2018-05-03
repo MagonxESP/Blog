@@ -46,11 +46,11 @@ class Comment
         return $this->content;
     }
 
-    public function getUser() {
+    public function getUser(): User {
         return $this->user;
     }
 
-    public function getPost() {
+    public function getPost(): Post {
         return $this->post;
     }
 
@@ -62,19 +62,19 @@ class Comment
         $this->id = $id;
     }
 
-    public function setContent($content) {
+    public function setContent(string $content) {
         $this->content = strip_tags(htmlspecialchars($content));
     }
 
-    public function setUser($user) {
+    public function setUser(User $user) {
         $this->user = $user;
     }
 
-    public function setPost($post) {
+    public function setPost(Post $post) {
         $this->post = $post;
     }
 
-    public function setCreation_date($creation_date) {
+    public function setCreation_date(\DateTime $creation_date) {
         $this->creation_date = $creation_date;
     }
 

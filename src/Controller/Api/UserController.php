@@ -46,26 +46,20 @@ class UserController extends Controller {
 
         return new JsonResponse($allusers);
     }
-    /*
-    public function getUser(string $username) {
-        $array = [];
 
+    public function getUserByUserName(string $username) {
         try {
-            $users = $this->getDoctrine()
+            $user = $this->getDoctrine()
                 ->getRepository(User::class)
-                ->findBy([ 'username' => $username ]);
-
-            foreach($users as $user) {
-                $array[] = $this->serialize($user);
-            }
+                ->findOneBy([ 'username' => $username ]);
         } catch(\Exception $e) {
             return new JsonResponse([
                 'error' => $e->getMessage()
             ], 404);
         }
 
-        return new JsonResponse($array);
-    }*/
+        return new JsonResponse($this->serialize($user));
+    }
 
     public function newUser(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
         try {
@@ -98,6 +92,76 @@ class UserController extends Controller {
         return new JsonResponse($this->serialize($newuser));
     }
 
+    public function updateUser(Request $request, string $username, UserPasswordEncoderInterface $passwordEncoder) {
+        // inicializamos con 204 por si al final del persist salta una excepcion el en catch devolvemos el 204
+        $statusCode = 204;
 
+        try {
+            $user = $this->getDoctrine()
+                        ->getRepository(User::class)
+                        ->findOneBy([ 'username' => $username ]);
+
+            if($user == null) {
+                $statusCode = 404;
+                throw new \Exception("User not found");
+            }
+
+            $username = $request->request->get('username');
+            $password = $request->request->get('password');
+            $rol = $request->request->get('rol');
+            $isActive = $request->request->get('isActive');
+
+            if($username != null) {
+                $user->setUsername($username);
+            }
+
+            if($password != null) {
+                $password = $passwordEncoder->encodePassword($user, $password);
+                $user->setPassword($password);
+            }
+
+            if($rol != null) {
+                $user->setRol($rol);
+            }
+
+            if($isActive != null) {
+                $user->setIsActive($isActive);
+            }
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($user);
+            $manager->flush();
+        } catch(\Exception $e) {
+            return new JsonResponse([
+                'error' => $e->getMessage()
+            ], $statusCode);
+        }
+
+        return new JsonResponse($this->serialize($user));
+    }
+
+    public function deleteUser(string $username) {
+        try {
+            $user = $this->getDoctrine()
+                ->getRepository(User::class)
+                ->findOneBy([ 'username' => $username ]);
+
+            if($user == null) {
+                throw new \Exception("User not found");
+            }
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($user);
+            $manager->flush();
+        } catch(\Exception $e) {
+            return new JsonResponse([
+                'error' => $e->getMessage()
+            ], 404);
+        }
+
+        return new JsonResponse([
+            'status' => 'User '.$username.' deleted!'
+        ]);
+    }
 
 }

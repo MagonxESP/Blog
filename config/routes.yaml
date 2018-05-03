@@ -96,7 +96,17 @@ api_new_user:
   controller: App\Controller\Api\UserController::newUser
   methods: [POST]
 
-#api_get_user:
-#  path: /api/user/{username}
-#  controller: App\Controller\Api\UserController::getUser
-#  methods: [GET]
+api_get_user:
+  path: /api/user/{username}
+  controller: App\Controller\Api\UserController::getUserByUserName
+  methods: [GET]
+
+api_update_user:
+  path: /api/user/{username}
+  controller: App\Controller\Api\UserController::updateUser
+  methods: [PUT]
+
+api_delete_user:
+  path: /api/user/{username}
+  controller: App\Controller\Api\UserController::deleteUser
+  methods: [DELETE]
